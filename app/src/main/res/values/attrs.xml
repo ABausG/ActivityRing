@@ -2,8 +2,11 @@
 <resources>
     <declare-styleable name="ActivityRing">
         <attr name="color" format="color"/>
+        <attr name="emptyOpacity" format="float"/>
         <attr name="strokeWidth" format="dimension"/>
-        <attr name="angle" format="float"/>
+        <attr name="iconColor" format="color"/>
         <attr name="icon" format="reference"/>
+        <attr name="progress" format="float"/>
+
     </declare-styleable>
 </resources>

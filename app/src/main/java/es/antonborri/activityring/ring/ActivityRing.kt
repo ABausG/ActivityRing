@@ -41,25 +41,66 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     private var maskBitmap: Bitmap? = null
     private var resultBitmap: Bitmap? = null
 
-    var color: Int
+    var color: Int = getThemeAccentColor()
+        set(value) {
+            field = value
+            updatePaint()
+            updateArcPaint()
+            redrawRing()
+        }
+    var emptyOpacity = 0.15f
+        set(value) {
+            field = value
+            updateArcPaint()
+            redrawRing()
+        }
     var strokeWidth = 24f
-    var angle = 120f
+        set(value) {
+            field = value
+            updatePaint()
+            updateMaskPaint()
+            updateArcPaint()
+            redrawRing()
+        }
+    var iconColor: Int = ContextCompat.getColor(context, android.R.color.black)
+        set(value) {
+            field = value
+            invalidate()
+        }
+    var progress = 0f
+        set(value) {
+            field = value
+            redrawRing()
+        }
+
     var drawable: Drawable? = null
+        set(value) {
+            field = value
+            invalidate()
+        }
 
 
     init {
-
-
         val density = resources.displayMetrics.density
 
-        color = getThemeAccentColor()
+        paint = Paint()
+        maskPaint = Paint()
+        arcPaint = Paint()
+        shadowPaint = Paint()
+        targetPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        //color = getThemeAccentColor()
+        //emptyOpacity = 0.2f
+        //iconColor = ContextCompat.getColor(context, android.R.color.black)
         strokeWidth *= density
 
         if (attrs != null) {
             val a: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.ActivityRing)
             color = a.getColor(R.styleable.ActivityRing_color, color)
+            emptyOpacity = a.getFloat(R.styleable.ActivityRing_emptyOpacity, 0.15f)
             strokeWidth = a.getDimension(R.styleable.ActivityRing_strokeWidth, strokeWidth)
-            angle = a.getFloat(R.styleable.ActivityRing_angle, angle)
+            progress = a.getFloat(R.styleable.ActivityRing_progress, 0f)
+            iconColor = a.getColor(R.styleable.ActivityRing_iconColor, iconColor)
             val drawableIdAttr = a.getResourceId(R.styleable.ActivityRing_icon, 0)
             a.recycle()
             if (drawableIdAttr != 0) {
@@ -67,42 +108,17 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
             }
         }
 
-        paint = Paint()
-        paint.apply {
-            color = this@ActivityRing.color
-            isAntiAlias = true
-            style = Paint.Style.STROKE
-            strokeCap = Paint.Cap.ROUND
-            strokeWidth = this@ActivityRing.strokeWidth
-        }
 
-        arcPaint = Paint()
-        arcPaint.apply {
-            color = this@ActivityRing.color
-            isAntiAlias = true
-            style = Paint.Style.STROKE
-            strokeCap = Paint.Cap.ROUND
-            strokeWidth = this@ActivityRing.strokeWidth
-            alpha = 30
-        }
 
-        shadowPaint = Paint()
+        updatePaint()
+        updateMaskPaint()
+        updateArcPaint()
+
         shadowPaint.apply {
-            color = ContextCompat.getColor(context, android.R.color.black)
+            color = iconColor
             style = Paint.Style.FILL
             isAntiAlias = true
         }
-
-        maskPaint = Paint()
-        maskPaint.apply {
-            color = ContextCompat.getColor(context, android.R.color.white)
-            style = Paint.Style.STROKE
-            strokeCap = Paint.Cap.ROUND
-            strokeWidth = this@ActivityRing.strokeWidth
-            isAntiAlias = true
-        }
-
-        targetPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         targetPaint.apply {
             xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
         }
@@ -110,7 +126,6 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-
         val width = View.getDefaultSize(suggestedMinimumWidth, widthMeasureSpec)
         val height = View.getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
         val min = Math.min(width, height)
@@ -131,7 +146,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
         super.onDraw(canvas)
 
         if (resultBitmap == null) {
-            resultBitmap = drawMaskedRing()
+            resultBitmap = createMaskedRing()
         }
 
         canvas.drawBitmap(resultBitmap, 0f, 0f, null)
@@ -139,7 +154,6 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
 
         drawIcon(canvas)
     }
-
 
     private fun getThemeAccentColor(): Int {
         val colorAttr: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -169,17 +183,21 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
         val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bmp)
         canvas.drawArc(rectangle, 0f, 360f, false, maskPaint)
+
+        resultBitmap = null
+
         return bmp
     }
 
-    private fun drawRing(): Bitmap {
+    private fun createRing(): Bitmap {
         val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bmp)
         var startAngle = -90f
+        var angle = progress * 360
+
 
         //Draw Semi-Transparent Ring in Background
         canvas.drawArc(rectangle, -90f, 360f, false, arcPaint)
-
 
         if (angle < 360) {
             //Shadow for Beginning of Arc
@@ -196,44 +214,47 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
             paint.style = Paint.Style.STROKE
         }
 
-        //Draw Full Circle First if Angle is > 360
-        if (angle >= 360f) {
-            canvas.drawArc(rectangle, -90f, 360f, false, paint)
-        }
-
         if (angle > 0f) {
-            //Draw Shadow
-            val shadowAngle = angle + 90
-            val shadowRad = Math.toRadians(shadowAngle.toDouble())
-            if (shadowBitmap == null) {
-                shadowBitmap = createShadow()
+
+            if(angle <= 270){
+                drawEndShadow(angle, canvas)
             }
-            canvas.drawBitmap(shadowBitmap, translateX - radius * Math.cos(shadowRad).toFloat(), translateY - radius * Math.sin(shadowRad).toFloat(), null)
-
-
-            //Manipulate Angle to work Around Canvas drawing full Circles if angle > 360
-            if (angle == 360f) {
-                startAngle = 90f
-                angle = 180f
-            } else if (angle > 360f) {
-                angle %= 360
-                startAngle = angle - 180 - 90 //-180 for the drawn Offset and -90 for the general Offset
-                angle = 180f //Set Sweep Angle to draw a half Circle to Cover up the whole shadow
-            }
-
 
             //Draw Arc
-            canvas.drawArc(rectangle, startAngle, angle, false, paint)
+            canvas.drawArc(rectangle, -90f, angle, false, paint)
+
+
+            //Draw a half Arc to Properly display the Shadow
+            if(angle > 270) {
+                drawEndShadow(angle, canvas)
+                angle %= 360
+                startAngle = angle - 180 - 90
+                angle = 180f
+                canvas.drawArc(rectangle, startAngle, angle, false, paint)
+            }
+
         }
+
+        resultBitmap = null
 
         return bmp
     }
 
-    private fun drawMaskedRing(): Bitmap {
+    private fun drawEndShadow(angle: Float, canvas: Canvas){
+        //Draw Shadow
+        val shadowAngle = angle + 90
+        val shadowRad = Math.toRadians(shadowAngle.toDouble())
+        if (shadowBitmap == null) {
+            shadowBitmap = createShadow()
+        }
+        canvas.drawBitmap(shadowBitmap, translateX - radius * Math.cos(shadowRad).toFloat(), translateY - radius * Math.sin(shadowRad).toFloat(), null)
+    }
+
+    private fun createMaskedRing(): Bitmap {
         val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bmp)
 
-        val target = ringBitmap ?: drawRing()
+        val target = ringBitmap ?: createRing()
         val mask = maskBitmap ?: createMask()
 
         canvas.drawBitmap(target, 0f, 0f, null)
@@ -254,6 +275,13 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
         }
     }
 
+    private fun redrawRing() {
+        if (width >0 && height > 0) {
+            ringBitmap = createRing()
+            invalidate()
+        }
+    }
+
     private fun blur(bitmap: Bitmap) {
         val rs = RenderScript.create(context)
         val blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs))
@@ -266,5 +294,36 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
         output.copyTo(bitmap)
         input.destroy()
         output.destroy()
+    }
+
+    private fun updatePaint() {
+        paint.apply {
+            color = this@ActivityRing.color
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = this@ActivityRing.strokeWidth
+        }
+    }
+
+    private fun updateMaskPaint() {
+        maskPaint.apply {
+            color = ContextCompat.getColor(context, android.R.color.white)
+            style = Paint.Style.STROKE
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = this@ActivityRing.strokeWidth
+            isAntiAlias = true
+        }
+    }
+
+    private fun updateArcPaint() {
+        arcPaint.apply {
+            color = this@ActivityRing.color
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = this@ActivityRing.strokeWidth
+            alpha = (255 * this@ActivityRing.emptyOpacity).toInt()
+        }
     }
 }
