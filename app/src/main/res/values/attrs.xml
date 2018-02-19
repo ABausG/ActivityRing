@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ActivityRing">
+        <attr name="color" format="color"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="angle" format="float"/>
+        <attr name="icon" format="reference"/>
+    </declare-styleable>
+</resources>

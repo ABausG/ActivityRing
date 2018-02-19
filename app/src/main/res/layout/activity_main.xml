@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="es.antonborri.activityring.MainActivity">
+
+    <view
+        android:id="@+id/out"
+        class="es.antonborri.activityring.ring.ActivityRing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        app:angle="70"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="32dp"
+        app:color="@color/out"
+        app:icon="@drawable/ic_arrow_forward"/>
+
+    <view
+        android:id="@+id/middle"
+        class="es.antonborri.activityring.ring.ActivityRing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="34dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="34dp"
+        android:padding="8dp"
+        app:angle="260"
+        app:color="@color/middle"
+        app:layout_constraintBottom_toBottomOf="@+id/out"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/out"
+        app:layout_constraintStart_toStartOf="@+id/out"
+        app:layout_constraintTop_toTopOf="@+id/out"
+        app:strokeWidth="32dp"
+        app:icon="@drawable/ic_tab" />
+
+    <view
+        android:id="@+id/in"
+        class="es.antonborri.activityring.ring.ActivityRing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="34dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="34dp"
+        android:padding="8dp"
+        app:angle="367"
+        app:color="@color/in"
+        app:layout_constraintBottom_toBottomOf="@+id/middle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/middle"
+        app:layout_constraintStart_toStartOf="@+id/middle"
+        app:layout_constraintTop_toTopOf="@+id/middle"
+        app:strokeWidth="32dp"
+        app:icon="@drawable/ic_arrow_up"/>
+</android.support.constraint.ConstraintLayout>
