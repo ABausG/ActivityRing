@@ -45,9 +45,6 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     var strokeWidth = 24f
     var angle = 120f
     var drawable: Drawable? = null
-    var drawableId: Int = 0
-
-    private var iconBitmap: Bitmap? = null
 
 
     init {
@@ -66,8 +63,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
             val drawableIdAttr = a.getResourceId(R.styleable.ActivityRing_icon, 0)
             a.recycle()
             if (drawableIdAttr != 0) {
-                drawableId = drawableIdAttr
-                drawable = VectorDrawableCompat.create(resources, drawableId, null)
+                drawable = VectorDrawableCompat.create(resources, drawableIdAttr, null)
             }
         }
 
@@ -140,10 +136,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
 
         canvas.drawBitmap(resultBitmap, 0f, 0f, null)
 
-        if (iconBitmap ==  null) {
-            iconBitmap = drawIcon()
-        }
-        //canvas.drawBitmap(iconBitmap,(width- iconBitmap!!.width)/2.toFloat(), (iconOffset * 4).toFloat(),null)
+
         drawIcon(canvas)
     }
 
@@ -182,26 +175,56 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     private fun drawRing(): Bitmap {
         val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bmp)
+        var startAngle = -90f
 
         //Draw Semi-Transparent Ring in Background
         canvas.drawArc(rectangle, -90f, 360f, false, arcPaint)
 
+
+        if (angle < 360) {
+            //Shadow for Beginning of Arc
+            if (shadowBitmap == null) {
+                shadowBitmap = createShadow()
+            }
+            canvas.drawBitmap(shadowBitmap, width / 2 - strokeWidth, (paddingTop - strokeWidth) / 2, null)
+        }
+
+        //Draw Circle when the angle is 0
+        if (angle == 0f) {
+            paint.style = Paint.Style.FILL
+            canvas.drawCircle((width / 2).toFloat(), (strokeWidth + paddingTop) / 2, strokeWidth / 2, paint)
+            paint.style = Paint.Style.STROKE
+        }
+
         //Draw Full Circle First if Angle is > 360
-        if (angle > 360) {
+        if (angle >= 360f) {
             canvas.drawArc(rectangle, -90f, 360f, false, paint)
-            angle -= (angle / 360).toInt() * 360
         }
 
-        //Draw Shadow
-        if (shadowBitmap == null) {
-            shadowBitmap = createShadow()
-        }
-        val shadowAngle = angle + 90
-        val shadowRad = Math.toRadians(shadowAngle.toDouble())
-        canvas.drawBitmap(shadowBitmap, translateX - radius * Math.cos(shadowRad).toFloat(), translateY - radius * Math.sin(shadowRad).toFloat(), null)
+        if (angle > 0f) {
+            //Draw Shadow
+            val shadowAngle = angle + 90
+            val shadowRad = Math.toRadians(shadowAngle.toDouble())
+            if (shadowBitmap == null) {
+                shadowBitmap = createShadow()
+            }
+            canvas.drawBitmap(shadowBitmap, translateX - radius * Math.cos(shadowRad).toFloat(), translateY - radius * Math.sin(shadowRad).toFloat(), null)
 
-        //Draw Arc
-        canvas.drawArc(rectangle, -90f, angle, false, paint)
+
+            //Manipulate Angle to work Around Canvas drawing full Circles if angle > 360
+            if (angle == 360f) {
+                startAngle = 90f
+                angle = 180f
+            } else if (angle > 360f) {
+                angle %= 360
+                startAngle = angle - 180 - 90 //-180 for the drawn Offset and -90 for the general Offset
+                angle = 180f //Set Sweep Angle to draw a half Circle to Cover up the whole shadow
+            }
+
+
+            //Draw Arc
+            canvas.drawArc(rectangle, startAngle, angle, false, paint)
+        }
 
         return bmp
     }
@@ -219,27 +242,13 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
         return bmp
     }
 
-    private fun drawIcon(): Bitmap {
+    private fun drawIcon(canvas: Canvas) {
         val size = strokeWidth.toInt() - iconOffset
-        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bmp)
-        if (drawable != null) {
-            DrawableCompat.setTint(drawable!!, arcPaint.color)
-            drawable!!.apply {
-                setBounds(0,0,size,size)
-                draw(canvas)
-            }
-        }
-        return bmp
-    }
-
-    private fun drawIcon(canvas: Canvas){
-        val size = strokeWidth.toInt() - iconOffset
-        val top = 4*iconOffset
+        val top = ((strokeWidth + paddingTop - size) / 2).toInt()
         if (drawable != null) {
             DrawableCompat.setTint(drawable!!, shadowPaint.color)
             drawable!!.apply {
-                setBounds((width/2-size/2),top,(width/2+size/2),top+size)
+                setBounds((width - size) / 2, top, (width + size) / 2, top + size)
                 draw(canvas)
             }
         }

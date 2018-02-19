@@ -16,7 +16,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="8dp"
         android:padding="8dp"
-        app:angle="70"
+        app:angle="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,15 +36,15 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="34dp"
         android:padding="8dp"
-        app:angle="260"
+        app:angle="90"
         app:color="@color/middle"
+        app:icon="@drawable/ic_tab"
         app:layout_constraintBottom_toBottomOf="@+id/out"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@+id/out"
         app:layout_constraintStart_toStartOf="@+id/out"
         app:layout_constraintTop_toTopOf="@+id/out"
-        app:strokeWidth="32dp"
-        app:icon="@drawable/ic_tab" />
+        app:strokeWidth="32dp" />
 
     <view
         android:id="@+id/in"
@@ -56,13 +56,33 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="34dp"
         android:padding="8dp"
-        app:angle="367"
+        app:angle="360"
         app:color="@color/in"
+        app:icon="@drawable/ic_arrow_up"
         app:layout_constraintBottom_toBottomOf="@+id/middle"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@+id/middle"
         app:layout_constraintStart_toStartOf="@+id/middle"
         app:layout_constraintTop_toTopOf="@+id/middle"
-        app:strokeWidth="32dp"
-        app:icon="@drawable/ic_arrow_up"/>
+        app:strokeWidth="32dp" />
+
+    <view
+        android:id="@+id/innest"
+        class="es.antonborri.activityring.ring.ActivityRing"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="34dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="34dp"
+        android:padding="8dp"
+        app:angle="450"
+        app:color="@color/colorAccent"
+        app:icon="@drawable/ic_arrow_up"
+        app:layout_constraintBottom_toBottomOf="@+id/in"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/in"
+        app:layout_constraintStart_toStartOf="@+id/in"
+        app:layout_constraintTop_toTopOf="@+id/in"
+        app:strokeWidth="32dp" />
 </android.support.constraint.ConstraintLayout>
