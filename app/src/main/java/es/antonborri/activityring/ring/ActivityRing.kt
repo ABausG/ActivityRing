@@ -23,7 +23,7 @@ import es.antonborri.activityring.R
  *
  * Displays a Progress Ring
  */
-class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+class ActivityRing(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val paint: Paint = Paint()
     private val arcPaint: Paint = Paint()
@@ -59,12 +59,18 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     var strokeWidth = 32f * resources.displayMetrics.density
         set(value) {
             field = value
+            shadowBitmap = null
             updatePaint()
             updateMaskPaint()
             updateArcPaint()
             redrawRing()
         }
     var iconColor: Int = ContextCompat.getColor(context, android.R.color.black)
+        set(value) {
+            field = value
+            invalidate()
+        }
+    var showIcon: Boolean = true
         set(value) {
             field = value
             invalidate()
@@ -91,6 +97,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
             strokeWidth = a.getDimension(R.styleable.ActivityRing_strokeWidth, strokeWidth)
             progress = a.getFloat(R.styleable.ActivityRing_progress, 0f)
             iconColor = a.getColor(R.styleable.ActivityRing_iconColor, iconColor)
+            showIcon = a.getBoolean(R.styleable.ActivityRing_showIcon, showIcon)
             val drawableIdAttr = a.getResourceId(R.styleable.ActivityRing_icon, 0)
             a.recycle()
             if (drawableIdAttr != 0) {
@@ -136,14 +143,16 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
 
 
         //Mask the Ring
-        if (resultBitmap == null) {
+        if (resultBitmap == null && height > 0 && width > 0) {
             resultBitmap = createMaskedRing()
         }
 
         canvas.drawBitmap(resultBitmap, 0f, 0f, null)
 
         //Draw Icon as Last Step
-        drawIcon(canvas)
+        if (showIcon) {
+            drawIcon(canvas)
+        }
     }
 
     /**
@@ -240,7 +249,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
         if (angle > 0f) {
 
             //Draws Shadow under tip of Arc
-            if(angle <= 270){
+            if (angle <= 270) {
                 drawEndShadow(angle, canvas)
             }
 
@@ -250,7 +259,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
 
 
             //Draw a half Arc to Properly display the Shadow if the Angle is above 270
-            if(angle > 270) {
+            if (angle > 270) {
                 drawEndShadow(angle, canvas)
                 angle %= 360
                 startAngle = angle - 180 - 90
@@ -268,7 +277,7 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     /**
      * Draws Shadow Bitmap at Position of Circles End
      */
-    private fun drawEndShadow(angle: Float, canvas: Canvas){
+    private fun drawEndShadow(angle: Float, canvas: Canvas) {
         //Draw Shadow
         val shadowAngle = angle + 90
         val shadowRad = Math.toRadians(shadowAngle.toDouble())
@@ -311,8 +320,9 @@ class ActivityRing(context: Context, attrs: AttributeSet?) : View(context, attrs
     }
 
     private fun redrawRing() {
-        if (width >0 && height > 0) {
-            ringBitmap = createRing()
+        if (width > 0 && height > 0) {
+            ringBitmap = null
+            resultBitmap = null
             invalidate()
         }
     }

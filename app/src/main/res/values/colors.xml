@@ -6,7 +6,7 @@
 
     <color name="out">#D50000</color>
     <color name="middle">#76FF03</color>
-    <color name="in">#00E5FF</color>
+    <color name="inner">#00E5FF</color>
 
     <color name="black">#000000</color>
 </resources>

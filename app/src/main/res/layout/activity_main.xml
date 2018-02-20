@@ -4,104 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="es.antonborri.activityring.MainActivity">
+    tools:context="es.antonborri.activityring.MainActivity"
+    tools:layout_editor_absoluteY="81dp">
 
-    <view
-        android:id="@+id/ring_out"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="8dp"
-        android:padding="8dp"
-        app:color="@color/out"
-        app:icon="@drawable/ic_arrow_forward"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:progress="0"
-        app:strokeWidth="32dp" />
-
-    <view
-        android:id="@+id/ring_middle"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="34dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="34dp"
-        android:padding="8dp"
-        app:color="@color/middle"
-        app:icon="@drawable/ic_tab"
-        app:layout_constraintBottom_toBottomOf="@+id/ring_out"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@+id/ring_out"
-        app:layout_constraintStart_toStartOf="@+id/ring_out"
-        app:layout_constraintTop_toTopOf="@+id/ring_out"
-        app:progress="0.25"
-        app:strokeWidth="32dp" />
-
-    <view
-        android:id="@+id/ring_in"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="34dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="34dp"
-        android:padding="8dp"
-        app:color="@color/in"
-        app:icon="@drawable/ic_arrow_up"
-        app:layout_constraintBottom_toBottomOf="@+id/ring_middle"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@+id/ring_middle"
-        app:layout_constraintStart_toStartOf="@+id/ring_middle"
-        app:layout_constraintTop_toTopOf="@+id/ring_middle"
-        app:progress="1"
-        app:strokeWidth="32dp" />
-
-    <view
-        android:id="@+id/ring_innest"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="34dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="34dp"
-        android:padding="8dp"
-        app:color="@color/colorAccent"
-        app:icon="@drawable/ic_arrow_up"
-        app:layout_constraintBottom_toBottomOf="@+id/ring_in"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@+id/ring_in"
-        app:layout_constraintStart_toStartOf="@+id/ring_in"
-        app:layout_constraintTop_toTopOf="@+id/ring_in"
-        app:progress="1.25"
-        app:strokeWidth="32dp" />
-
-    <SeekBar
+    <android.support.v7.widget.AppCompatSeekBar
         android:id="@+id/seekBar_out"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:max="200"
         android:progress="0"
         android:progressTint="@color/out"
         android:thumbTint="@color/out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ring_out" />
+        app:layout_constraintTop_toBottomOf="@+id/ring_containter" />
 
     <SeekBar
         android:id="@+id/seekBar_middle"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -116,102 +39,80 @@
 
     <SeekBar
         android:id="@+id/seekBar_in"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:max="200"
         android:progress="100"
-        android:progressTint="@color/in"
-        android:thumbTint="@color/in"
+        android:progressTint="@color/inner"
+        android:thumbTint="@color/inner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBar_middle" />
 
-    <SeekBar
-        android:id="@+id/seekBar_innest"
+    <view
+        android:id="@+id/ring_containter"
+        class="es.antonborri.activityring.ring.ActivityRingContainer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:max="200"
-        android:progress="125"
-        android:progressTint="@color/colorAccent"
-        android:thumbTint="@color/colorAccent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <view
+        android:id="@+id/cont_small_1"
+        class="es.antonborri.activityring.ring.ActivityRingContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        app:showIcon="false"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/cont_small_2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBar_in" />
 
     <view
-        android:id="@+id/ring_out2"
-        class="es.antonborri.activityring.ring.ActivityRing"
+        android:id="@+id/cont_small_2"
+        class="es.antonborri.activityring.ring.ActivityRingContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="90dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginTop="90dp"
-        app:color="@color/out"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="24dp"
+        app:showIcon="false"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/cont_small_3"
+        app:layout_constraintStart_toEndOf="@id/cont_small_1"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_in" />
+
+    <view
+        android:id="@+id/cont_small_3"
+        class="es.antonborri.activityring.ring.ActivityRingContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        app:showIcon="false"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/seekBar_innest"
-        app:progress="0"
-        app:strokeWidth="4dp" />
+        app:layout_constraintStart_toEndOf="@id/cont_small_2"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_in" />
 
-    <view
-        android:id="@+id/ring_middle2"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        app:color="@color/middle"
-        app:layout_constraintBottom_toBottomOf="@+id/ring_out2"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@+id/ring_out2"
-        app:layout_constraintStart_toStartOf="@+id/ring_out2"
-        app:layout_constraintTop_toTopOf="@+id/ring_out2"
-        app:progress="0.25"
-        app:strokeWidth="4dp" />
-
-    <view
-        android:id="@+id/ring_in2"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        app:color="@color/in"
-        app:layout_constraintBottom_toBottomOf="@+id/ring_middle2"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@+id/ring_middle2"
-        app:layout_constraintStart_toStartOf="@+id/ring_middle2"
-        app:layout_constraintTop_toTopOf="@+id/ring_middle2"
-        app:progress="1"
-        app:strokeWidth="4dp" />
-
-    <view
-        android:id="@+id/ring_innest2"
-        class="es.antonborri.activityring.ring.ActivityRing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        app:color="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="@+id/ring_in2"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@+id/ring_in2"
-        app:layout_constraintStart_toStartOf="@+id/ring_in2"
-        app:layout_constraintTop_toTopOf="@+id/ring_in2"
-        app:progress="1.25"
-        app:strokeWidth="4dp" />
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="583dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
 
 </android.support.constraint.ConstraintLayout>

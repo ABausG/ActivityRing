@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ActivityRing">
-        <attr name="color" format="color"/>
-        <attr name="emptyOpacity" format="float"/>
-        <attr name="strokeWidth" format="dimension"/>
-        <attr name="iconColor" format="color"/>
-        <attr name="icon" format="reference"/>
-        <attr name="progress" format="float"/>
+    <declare-styleable name="GlobalAttrs">
+        <attr name="showIcon" format="boolean" />
+    </declare-styleable>
 
+
+    <declare-styleable name="ActivityRing">
+        <attr name="color" format="color" />
+        <attr name="emptyOpacity" format="float" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="iconColor" format="color" />
+        <attr name="icon" format="reference" />
+        <attr name="progress" format="float" />
+        <attr name="showIcon" />
+    </declare-styleable>
+
+    <declare-styleable name="ActivityRingContainer">
+        <attr name="showIcon" />
+        <attr name="ringMargin" format="dimension" />
     </declare-styleable>
 </resources>
