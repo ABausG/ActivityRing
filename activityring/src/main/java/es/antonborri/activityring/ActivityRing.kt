@@ -1,4 +1,4 @@
-package es.antonborri.activityring.ring
+package es.antonborri.activityring
 
 import android.content.Context
 import android.content.res.TypedArray

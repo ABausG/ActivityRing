@@ -1,12 +1,11 @@
-package es.antonborri.activityring.ring
+package es.antonborri.activityring
 
 import android.content.Context
 import android.content.res.TypedArray
 import android.support.constraint.ConstraintLayout
 import android.support.constraint.ConstraintSet
 import android.util.AttributeSet
-import android.util.Log
-import es.antonborri.activityring.R
+import java.util.*
 
 /**
  * Created by antonborries on 20.02.18.
@@ -90,7 +89,7 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
     }
 
     private fun calculateStrokeWidth() {
-        strokeWidth = (width / Math.max(12, activityRings.size * 4)).toFloat()
+        strokeWidth = (width / Math.max(10, (activityRings.size + 1) * 2)).toFloat()
     }
 
     /**

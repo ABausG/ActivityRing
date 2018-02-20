@@ -54,7 +54,7 @@
 
     <view
         android:id="@+id/ring_containter"
-        class="es.antonborri.activityring.ring.ActivityRingContainer"
+        class="es.antonborri.activityring.ActivityRingContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="32dp"
@@ -67,7 +67,7 @@
 
     <view
         android:id="@+id/cont_small_1"
-        class="es.antonborri.activityring.ring.ActivityRingContainer"
+        class="es.antonborri.activityring.ActivityRingContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
@@ -82,7 +82,7 @@
 
     <view
         android:id="@+id/cont_small_2"
-        class="es.antonborri.activityring.ring.ActivityRingContainer"
+        class="es.antonborri.activityring.ActivityRingContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
@@ -95,7 +95,7 @@
 
     <view
         android:id="@+id/cont_small_3"
-        class="es.antonborri.activityring.ring.ActivityRingContainer"
+        class="es.antonborri.activityring.ActivityRingContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="24dp"
