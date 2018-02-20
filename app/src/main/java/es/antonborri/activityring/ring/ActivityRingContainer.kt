@@ -35,7 +35,6 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         calculateStrokeWidth()
-
     }
 
     var ringMargin: Int = 2
@@ -51,6 +50,7 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
         }
 
     init {
+        //Display Single Ring for Layout Editor
         if (isInEditMode) {
             val ring1 = ActivityRing(context)
             ring1.apply {
@@ -59,6 +59,7 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
             addRing(ring1)
         }
 
+        //Retrieve Attributes
         if (attrs != null) {
             val a: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.ActivityRingContainer)
             showIcons = a.getBoolean(R.styleable.ActivityRingContainer_showIcon, showIcons)
@@ -67,10 +68,18 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
         }
     }
 
+    /**
+     * @param rings Ring(s) to be Added
+     * Add Rings to the Layout
+     */
     fun addRings(rings: List<ActivityRing>) {
         addRing(*rings.toTypedArray())
     }
 
+    /**
+     * @param ring Ring(s) to be Added
+     * Add Rings to the Layout
+     */
     fun addRing(vararg ring: ActivityRing) {
         activityRings.addAll(ring)
         for (newRing in ring) {
@@ -84,7 +93,11 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
         strokeWidth = (width / Math.max(12, activityRings.size * 4)).toFloat()
     }
 
+    /**
+     * Updates Constraint Layout
+     */
     private fun updateConstraints() {
+        //Only Add Children not yet in layout
         for (index in childCount until activityRings.size) {
             val view = activityRings[index]
             view.strokeWidth = strokeWidth
@@ -115,11 +128,14 @@ class ActivityRingContainer(context: Context, attrs: AttributeSet?) : Constraint
                 applyTo(this@ActivityRingContainer)
             }
         }
-        //invalidate()
     }
 
+    /**
+     * @param position Position of Ring
+     * @return ActivityRing at that specific Position
+     */
     fun get(position: Int): ActivityRing? {
-        return if (position >= 0) {
+        return if (position >= 0 && position < activityRings.size) {
             activityRings[position]
         } else {
             null
