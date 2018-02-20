@@ -78,4 +78,4 @@ showIcon    |Boolean  |true    |Toggles Icons On/Off for all Rings in View
 The Container will change the Strokewidth of all Children automatically to have enough space for every Ring
 
 # License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
